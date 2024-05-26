@@ -15,10 +15,21 @@ type Zoo struct {
 	Animals []Animal
 }
 
+// Визначаємо структуру кліток
+type Cage struct {
+	ID      int
+	Animals []Animal
+}
+
 // Функція для повернення звірів в їх клітки
-func (z *Zoo) ReturnToCage() {
+func (z *Zoo) ReturnToCage(cages []*Cage) {
 	for _, animal := range z.Animals {
-		fmt.Printf("%s повернення в клітку %d\n", animal.Name, animal.Cage)
+		for _, cage := range cages {
+			if cage.ID == animal.Cage {
+				cage.Animals = append(cage.Animals, animal)
+				fmt.Printf("%s повернення в клітку %d\n", animal.Name, animal.Cage)
+			}
+		}
 	}
 }
 
@@ -33,10 +44,27 @@ func main() {
 			{"Слон", 5},
 		},
 	}
+	// Створюю клітки
+	cages := []*Cage{
+		{ID: 1},
+		{ID: 2},
+		{ID: 3},
+		{ID: 4},
+		{ID: 5},
+	}
 
-	// Ситуация, коли звірі втекли з кліток
+	// Ситуація, коли звірі втекли з кліток
 	fmt.Println("Звірі утекли з зоопарку!")
 
 	// Функція для повернення звірів в клітки
-	zoo.ReturnToCage()
+	zoo.ReturnToCage(cages)
+
+	// Виводимо інформацію про клітки і їхніх мешканців
+	for _, cage := range cages {
+		fmt.Printf("Клітка %d містить звірів: ", cage.ID)
+		for _, animal := range cage.Animals {
+			fmt.Printf("%s ", animal.Name)
+		}
+		fmt.Println()
+	}
 }
